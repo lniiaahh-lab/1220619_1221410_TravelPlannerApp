@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Default Android Colors -->
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Our Assigned Theme Colors -->
+
+    <color name="theme_color_1">#FBF5DD</color>
+    <color name="theme_color_2">#E7E1B1</color>
+    <color name="theme_color_3">#306D29</color>
+    <color name="theme_color_4">#0D530E</color>
+
 </resources>
