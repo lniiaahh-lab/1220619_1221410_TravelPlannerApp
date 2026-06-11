@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: check against database (next step)
             // For now navigate to Home
             Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         });

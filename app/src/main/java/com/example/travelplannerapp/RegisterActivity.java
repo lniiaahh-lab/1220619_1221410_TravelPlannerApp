@@ -1,4 +1,5 @@
 package com.example.travelplannerapp;
+import com.example.travelplannerapp.database.DatabaseHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +13,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.travelplannerapp.database.DatabaseHelper;
+
 public class RegisterActivity extends AppCompatActivity {
 
     EditText etEmail, etFirstName, etLastName, etPassword, etConfirmPassword, etPhone;
     Spinner spinnerGender, spinnerCategory;
     Button btnRegister;
+    DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
