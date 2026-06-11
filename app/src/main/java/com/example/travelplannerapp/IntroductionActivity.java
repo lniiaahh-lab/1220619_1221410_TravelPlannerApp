@@ -2,70 +2,77 @@ package com.example.travelplannerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.travelplannerapp.api.RetrofitClient;
+import com.example.travelplannerapp.models.Trip;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IntroductionActivity extends AppCompatActivity {
+
+    Button btnConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_introduction);
 
-        // Handle system bars padding
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        btnConnect = findViewById(R.id.btnConnect);
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                btnConnect.setEnabled(false);
+                btnConnect.setText("Connecting...");
+
+                RetrofitClient.getApiService().getTrips().enqueue(new Callback<List<trip>>() {
+
+                    @Override
+                    public void onResponse(Call<List<trip>> call, Response<List<trip>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            List<trip> trips = response.body();
+
+                            Toast.makeText(IntroductionActivity.this,
+                                    "Connected! " + trips.size() + " trips loaded.",
+                                    Toast.LENGTH_SHORT).show();
+
+                            // TODO: save trips to database (next step)
+
+                            // Navigate to Login screen
+                            Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            btnConnect.setEnabled(true);
+                            btnConnect.setText("Connect");
+                            Toast.makeText(IntroductionActivity.this,
+                                    "Connection failed. Try again.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<trip>> call, Throwable t) {
+                        btnConnect.setEnabled(true);
+                        btnConnect.setText("Connect");
+                        Toast.makeText(IntroductionActivity.this,
+                                "Error: " + t.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         });
-
-        // Initialize Views
-        ImageView introImage = findViewById(R.id.introImage);
-        TextView tvTitle = findViewById(R.id.tvTitle);
-        TextView tvDescription = findViewById(R.id.tvDescription);
-        Button btnGetStarted = findViewById(R.id.btnConnect);
-
-        // Load Animation
-        Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-        
-        // Apply staggered animations
-        introImage.startAnimation(slideUp);
-        
-        Animation titleAnim = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-        titleAnim.setStartOffset(200);
-        tvTitle.startAnimation(titleAnim);
-        
-        Animation descAnim = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-        descAnim.setStartOffset(400);
-        tvDescription.startAnimation(descAnim);
-        
-        Animation btnAnim = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-        btnAnim.setStartOffset(600);
-        btnGetStarted.startAnimation(btnAnim);
-
-        // Button Click Listener
-        btnGetStarted.setOnClickListener(v -> {
-            Intent intent = new Intent(IntroductionActivity.this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            finish();
-        });
-
-        Toast.makeText(
-                IntroductionActivity.this,
-                "Connecting...",
-                Toast.LENGTH_SHORT
-        ).show();
     }
 }
