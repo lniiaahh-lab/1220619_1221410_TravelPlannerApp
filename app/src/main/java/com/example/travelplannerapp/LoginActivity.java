@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.travelplannerapp.database.DatabaseHelper;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword;
-    CheckBox cbRememberMe;
-    Button btnLogin, btnSignUp;
-    SharedPreferences sharedPreferences;
+    private EditText etEmail, etPassword;
+    private CheckBox cbRememberMe;
+    private Button btnLogin, btnSignUp;
+    private SharedPreferences sharedPreferences;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         cbRememberMe = findViewById(R.id.cbRememberMe);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
-
+        
+        databaseHelper = new DatabaseHelper(this);
         sharedPreferences = getSharedPreferences("TravelPlannerPrefs", MODE_PRIVATE);
 
         // Load saved email if Remember Me was checked
@@ -56,19 +60,22 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            // Save email if Remember Me is checked
-            if (cbRememberMe.isChecked()) {
-                sharedPreferences.edit().putString("savedEmail", email).apply();
-            } else {
-                sharedPreferences.edit().remove("savedEmail").apply();
-            }
+            // Check against database
+            if (databaseHelper.checkUser(email, password)) {
+                // Save email if Remember Me is checked
+                if (cbRememberMe.isChecked()) {
+                    sharedPreferences.edit().putString("savedEmail", email).apply();
+                } else {
+                    sharedPreferences.edit().remove("savedEmail").apply();
+                }
 
-            // TODO: check against database (next step)
-            // For now navigate to Home
-            Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+            }
         });
 
         btnSignUp.setOnClickListener(v -> {

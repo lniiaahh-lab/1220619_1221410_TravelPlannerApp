@@ -2,6 +2,7 @@ package com.example.travelplannerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -19,7 +20,7 @@ import retrofit2.Response;
 
 public class IntroductionActivity extends AppCompatActivity {
 
-    Button btnConnect;
+    private Button btnConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,48 +32,38 @@ public class IntroductionActivity extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 btnConnect.setEnabled(false);
                 btnConnect.setText("Connecting...");
 
                 RetrofitClient.getApiService().getTrips().enqueue(new Callback<List<trip>>() {
-
                     @Override
                     public void onResponse(Call<List<trip>> call, Response<List<trip>> response) {
                         if (response.isSuccessful() && response.body() != null) {
-
-                            List<trip> trips = response.body();
-
-                            Toast.makeText(IntroductionActivity.this,
-                                    "Connected! " + trips.size() + " trips loaded.",
-                                    Toast.LENGTH_SHORT).show();
-
-                            // TODO: save trips to database (next step)
-
-                            // Navigate to Login screen
-                            Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-
+                            Toast.makeText(IntroductionActivity.this, "Connected! " + response.body().size() + " trips loaded.", Toast.LENGTH_SHORT).show();
+                            navigateToLogin();
                         } else {
-                            btnConnect.setEnabled(true);
-                            btnConnect.setText("Connect");
-                            Toast.makeText(IntroductionActivity.this,
-                                    "Connection failed. Try again.",
-                                    Toast.LENGTH_SHORT).show();
+                            handleFailure("Connection failed (Error " + response.code() + "). Proceeding to Login...");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<trip>> call, Throwable t) {
-                        btnConnect.setEnabled(true);
-                        btnConnect.setText("Connect");
-                        Toast.makeText(IntroductionActivity.this,
-                                "Error: " + t.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                        handleFailure("Network Error. Proceeding to Login...");
                     }
                 });
             }
         });
+    }
+
+    private void handleFailure(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        // Even if connection fails, we allow the user to proceed after 2 seconds
+        new Handler().postDelayed(this::navigateToLogin, 2000);
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

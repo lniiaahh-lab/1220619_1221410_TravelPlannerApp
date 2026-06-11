@@ -13,7 +13,7 @@
     <color name="theme_color_3">#306D29</color>
     <color name="theme_color_4">#0D530E</color>
 
-    <!-- Missing colors used in layouts -->
+    <!-- Missing resource names used in layouts, mapped to existing theme colors -->
     <color name="colorPrimary">@color/theme_color_3</color>
     <color name="colorSecondary">@color/theme_color_4</color>
     <color name="colorBackground">@color/theme_color_1</color>

@@ -1,5 +1,4 @@
 package com.example.travelplannerapp;
-import com.example.travelplannerapp.database.DatabaseHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +13,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelplannerapp.database.DatabaseHelper;
+import com.example.travelplannerapp.models.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText etEmail, etFirstName, etLastName, etPassword, etConfirmPassword, etPhone;
-    Spinner spinnerGender, spinnerCategory;
-    Button btnRegister;
-    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    private EditText etEmail, etFirstName, etLastName, etPassword, etConfirmPassword, etPhone;
+    private Spinner spinnerGender, spinnerCategory;
+    private Button btnRegister;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerGender = findViewById(R.id.spinnerGender);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         btnRegister = findViewById(R.id.btnRegister);
+        
+        databaseHelper = new DatabaseHelper(this);
 
         // Gender spinner
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this,
@@ -58,6 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
             String password = etPassword.getText().toString().trim();
             String confirmPassword = etConfirmPassword.getText().toString().trim();
             String phone = etPhone.getText().toString().trim();
+            String gender = spinnerGender.getSelectedItem().toString();
+            String category = spinnerCategory.getSelectedItem().toString();
 
             if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 etEmail.setError("Enter a valid email");
@@ -92,11 +96,16 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // TODO: save user to database (next step)
-            Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            User user = new User(email, firstName, lastName, password, phone, gender, category);
+
+            if (databaseHelper.insertUser(user)) {
+                Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Registration failed. User might already exist.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

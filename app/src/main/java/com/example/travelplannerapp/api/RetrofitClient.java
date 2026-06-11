@@ -5,7 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://jsonkeeper.com/";
+    // JSON Keeper URLs usually follow this format: https://jsonkeeper.com/b/ID
+    private static final String BASE_URL = "https://jsonkeeper.com/b/";
     private static Retrofit retrofit = null;
 
     public static ApiService getApiService() {
