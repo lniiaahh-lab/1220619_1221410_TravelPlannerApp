@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,5 +61,11 @@ public class IntroductionActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
+
+        Toast.makeText(
+                IntroductionActivity.this,
+                "Connecting...",
+                Toast.LENGTH_SHORT
+        ).show();
     }
 }
