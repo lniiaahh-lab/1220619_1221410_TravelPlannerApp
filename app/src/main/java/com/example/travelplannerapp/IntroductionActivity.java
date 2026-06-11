@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelplannerapp.api.RetrofitClient;
-import com.example.travelplannerapp.models.Trip;
+import com.example.travelplannerapp.models.trip;
 
 import java.util.List;
 
