@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.travelplannerapp"
     compileSdk {
         version = release(36) {
@@ -43,4 +44,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    // Retrofit for API calls
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Glide for loading images from URLs later
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
