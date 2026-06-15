@@ -1,6 +1,6 @@
 package com.example.travelplannerapp.models;
 
-public class trip {
+public class Trip {
 
     private int id;
     private String destination;
@@ -11,10 +11,12 @@ public class trip {
     private String description;
     private String image;
 
-    public trip() {
+    public Trip() {
     }
 
-    public trip(int id, String destination, String country,
+
+
+    public Trip(int id, String destination, String country,
                 int durationDays, double price,
                 double rating, String description, String image) {
 
@@ -25,6 +27,37 @@ public class trip {
         this.price = price;
         this.rating = rating;
         this.description = description;
+        this.image = image;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setDurationDays(int durationDays) {
+        this.durationDays = durationDays;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
         this.image = image;
     }
 

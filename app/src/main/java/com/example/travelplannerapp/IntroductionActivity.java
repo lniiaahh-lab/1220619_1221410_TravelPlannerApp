@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelplannerapp.api.RetrofitClient;
-import com.example.travelplannerapp.models.trip;
+import com.example.travelplannerapp.models.Trip;
 
 import java.util.List;
 
@@ -35,9 +35,9 @@ public class IntroductionActivity extends AppCompatActivity {
                 btnConnect.setEnabled(false);
                 btnConnect.setText("Connecting...");
 
-                RetrofitClient.getApiService().getTrips().enqueue(new Callback<List<trip>>() {
+                RetrofitClient.getApiService().getTrips().enqueue(new Callback<List<Trip>>() {
                     @Override
-                    public void onResponse(Call<List<trip>> call, Response<List<trip>> response) {
+                    public void onResponse(Call<List<Trip>> call, Response<List<Trip>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             Toast.makeText(IntroductionActivity.this, "Connected! " + response.body().size() + " trips loaded.", Toast.LENGTH_SHORT).show();
                             navigateToLogin();
@@ -47,7 +47,7 @@ public class IntroductionActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<trip>> call, Throwable t) {
+                    public void onFailure(Call<List<Trip>> call, Throwable t) {
                         handleFailure("Network Error. Proceeding to Login...");
                     }
                 });
