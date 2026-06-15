@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment {
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TextView tv = new TextView(getContext());
-        tv.setText("Welcome to Travel Planner!");
-        tv.setTextSize(24);
-        tv.setPadding(40, 40, 40, 40);
-        return tv;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }
