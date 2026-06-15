@@ -4,4 +4,6 @@
     <string name="intro_description">Your journey starts here. Plan, track, and share your adventures with the best travel companion.</string>
     <string name="btn_get_started">Get Started</string>
     <string name="intro_img_desc">Introduction Image</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
