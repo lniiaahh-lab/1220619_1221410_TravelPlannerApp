@@ -18,7 +18,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="6dp"
-            android:background="#FFC107"/>
+            android:background="@color/theme_color_4"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="⭐ Recommended"
-                android:textColor="#FF9800"
+                android:textColor="@color/theme_color_3"
                 android:textStyle="bold"
                 android:textSize="14sp"/>
 
@@ -41,21 +41,21 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#222222"
+                android:textColor="@color/theme_color_4"
                 android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/tvCountry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#666666"
+                android:textColor="@color/theme_color_3"
                 android:layout_marginTop="4dp"/>
 
             <TextView
                 android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#444444"
+                android:textColor="@color/theme_color_4"
                 android:layout_marginTop="8dp"/>
 
             <LinearLayout
@@ -65,12 +65,16 @@
                 android:layout_marginTop="16dp">
 
                 <Button
+                    android:backgroundTint="@color/theme_color_3"
+                    android:textColor="@color/white"
                     android:id="@+id/btnDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Details"/>
 
                 <Button
+                    android:backgroundTint="@color/theme_color_4"
+                    android:textColor="@color/white"
                     android:id="@+id/btnFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

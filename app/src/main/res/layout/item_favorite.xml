@@ -7,75 +7,110 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDestination"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#222222"/>
-
-        <TextView
-            android:id="@+id/tvCountry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/tvRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"/>
-        </LinearLayout>
+        <!-- Top Accent Bar -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/theme_color_3"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end"
-            android:layout_marginTop="16dp">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <Button
-                android:id="@+id/btnDetails"
+            <!-- Destination -->
+            <TextView
+                android:id="@+id/tvDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Details"/>
+                android:textColor="@color/theme_color_4"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
-            <Button
-                android:id="@+id/btnReserve"
+            <!-- Country -->
+            <TextView
+                android:id="@+id/tvCountry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reserve"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginTop="4dp"
+                android:textColor="@color/theme_color_3"
+                android:textSize="14sp"/>
 
-            <ImageButton
-                android:id="@+id/btnRemove"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:background="@android:color/transparent"
-                android:src="@android:drawable/btn_star_big_off"/>
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/theme_color_2"/>
+
+            <!-- Rating & Price -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/theme_color_4"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/theme_color_3"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/theme_color_3"
+                    android:text="Details"
+                    android:textColor="@color/white"/>
+
+                <Button
+                    android:id="@+id/btnReserve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/theme_color_4"
+                    android:text="Reserve"
+                    android:textColor="@color/white"/>
+
+                <ImageButton
+                    android:id="@+id/btnRemove"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Remove Favorite"
+                    android:src="@android:drawable/btn_star_big_off"
+                    android:tint="@color/theme_color_4"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

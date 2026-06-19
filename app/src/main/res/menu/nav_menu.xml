@@ -24,7 +24,7 @@
     <item
         android:id="@+id/nav_special"
         android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Special Section" />
+        android:title="Recommended Trips" />
 
     <item
         android:id="@+id/nav_profile"
