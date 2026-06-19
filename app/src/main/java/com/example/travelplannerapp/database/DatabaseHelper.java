@@ -269,6 +269,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.delete("Users", "email=?", new String[]{email});
         return result > 0;
     }
+    public boolean updateUserProfile(
+            String email,
+            String firstName,
+            String lastName,
+            String phone,
+            String password) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("firstName", firstName);
+        values.put("lastName", lastName);
+        values.put("phone", phone);
+        values.put("password", password);
+
+        int result = db.update(
+                "Users",
+                values,
+                "email=?",
+                new String[]{email});
+
+        return result > 0;
+    }
     public List<Reservation> getReservationsList(String userEmail) {
 
         List<Reservation> reservations = new ArrayList<>();
