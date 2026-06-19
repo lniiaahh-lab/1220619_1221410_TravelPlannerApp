@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import com.example.travelplannerapp.models.Reservation;
 import androidx.annotation.Nullable;
 
 import com.example.travelplannerapp.models.User;
@@ -268,5 +268,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete("Users", "email=?", new String[]{email});
         return result > 0;
+    }
+    public List<Reservation> getReservationsList(String userEmail) {
+
+        List<Reservation> reservations = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT r.*, t.destination FROM Reservations r " +
+                        "INNER JOIN Trips t ON r.tripId = t.id " +
+                        "WHERE r.userEmail=?",
+                new String[]{userEmail});
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                Reservation reservation = new Reservation(
+                        cursor.getString(cursor.getColumnIndexOrThrow("destination")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("reservationDate")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("status")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("quantity")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                );
+
+                reservations.add(reservation);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return reservations;
     }
 }
