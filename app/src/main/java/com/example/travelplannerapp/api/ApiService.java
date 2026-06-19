@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ApiService {
-    @GET("v3/qs/6a30289fda38895dfec4b101")
+    @GET("v3/qs/6a353eedda38895dfedd8957")
     Call<TripResponse> getTrips();
 }

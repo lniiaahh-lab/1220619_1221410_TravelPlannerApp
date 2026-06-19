@@ -66,22 +66,27 @@ public class Trip {
     }
 
     public String getDestination() {
+
         return destination;
     }
 
     public String getCountry() {
+
         return country;
     }
 
     public int getDurationDays() {
+
         return durationDays;
     }
 
     public double getPrice() {
+
         return price;
     }
 
     public double getRating() {
+
         return rating;
     }
 

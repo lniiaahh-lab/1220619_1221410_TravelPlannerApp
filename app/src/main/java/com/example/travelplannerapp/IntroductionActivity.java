@@ -2,6 +2,7 @@ package com.example.travelplannerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log; // <-- IMPORTED LOG FOR TESTING
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -45,8 +46,19 @@ public class IntroductionActivity extends AppCompatActivity {
                             List<Trip> trips = response.body().getRecord();
 
                             if (trips != null && !trips.isEmpty()) {
-                                // Save trips to database
+                                // 1. Save trips to database
                                 databaseHelper.insertTrips(trips);
+
+                                // --- START OF DATABASE TEST ---
+                                // 2. Read them back from the database to prove they saved
+                                List<Trip> savedTrips = databaseHelper.getAllTrips();
+                                Log.d("DB_TEST", "Successfully saved " + savedTrips.size() + " trips to the database!");
+
+                                // Print out the contents to Logcat
+                                for (Trip t : savedTrips) {
+                                    Log.d("DB_TEST", "Found in DB: " + t.getDestination() + " in " + t.getCountry());
+                                }
+                                // --- END OF DATABASE TEST ---
 
                                 Toast.makeText(IntroductionActivity.this,
                                         "Connected! " + trips.size() + " trips loaded.",
@@ -57,13 +69,15 @@ public class IntroductionActivity extends AppCompatActivity {
                                 showError("No trips found. Try again.");
                             }
                         } else {
-                            showError("Connection failed. Try again.");
+                            // Added response code to help debug if it fails!
+                            showError("Connection failed. Code: " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<TripResponse> call, Throwable t) {
                         showError("Error: " + t.getMessage());
+                        Log.e("API_ERROR", "Failure reason: " + t.getMessage()); // Prints exact error to Logcat
                     }
                 });
             }
@@ -81,6 +95,4 @@ public class IntroductionActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-
 }
