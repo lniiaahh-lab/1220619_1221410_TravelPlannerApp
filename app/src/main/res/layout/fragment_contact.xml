@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact Us"
+            android:textColor="@color/theme_color_4"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We'd love to hear from you"
+            android:textColor="@color/theme_color_3"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="40dp"
+            android:text="📞 Call Us"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/theme_color_4"/>
+
+        <Button
+            android:id="@+id/btnLocation"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="📍 Locate Us"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/theme_color_3"/>
+
+        <Button
+            android:id="@+id/btnEmail"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="✉️ Email Us"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/theme_color_4"/>
+
+    </LinearLayout>
+
+</ScrollView>
