@@ -229,6 +229,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return trips;
     }
+    public boolean insertAdmin(User user) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("email", user.getEmail());
+        values.put("firstName", user.getFirstName());
+        values.put("lastName", user.getLastName());
+        values.put("password", user.getPassword());
+        values.put("phone", user.getPhone());
+        values.put("gender", user.getGender());
+        values.put("category", user.getCategory());
+
+        values.put("isAdmin", 1);
+
+        long result =
+                db.insert(
+                        "Users",
+                        null,
+                        values);
+
+        return result != -1;
+    }
 
     // ========== RESERVATION METHODS ==========
 
