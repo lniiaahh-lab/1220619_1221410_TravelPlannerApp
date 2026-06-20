@@ -69,11 +69,29 @@ public class LoginActivity extends AppCompatActivity {
                     sharedPreferences.edit().remove("savedEmail").apply();
                 }
 
-                // Save current logged in user
                 sharedPreferences.edit().putString("currentUserEmail", email).apply();
-                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                Toast.makeText(this,
+                        "Login successful!",
+                        Toast.LENGTH_SHORT).show();
+
+                Intent intent;
+
+                if (databaseHelper.isAdmin(email)) {
+
+                    intent =
+                            new Intent(LoginActivity.this, AdminHomeActivity.class);
+
+                } else {
+
+                    intent =
+                            new Intent(
+                                    LoginActivity.this,
+                                    HomeActivity.class);
+                }
+
                 startActivity(intent);
+
                 finish();
             } else {
                 Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
