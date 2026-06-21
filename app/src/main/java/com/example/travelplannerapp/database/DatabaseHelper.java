@@ -414,6 +414,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return count;
     }
+
     public List<User> getUsersList() {
 
         List<User> users = new ArrayList<>();
