@@ -195,6 +195,90 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{userEmail, String.valueOf(tripId)});
         return result > 0;
     }
+    public boolean addTrip(Trip trip){
+
+        SQLiteDatabase db =
+                getWritableDatabase();
+
+        ContentValues values =
+                new ContentValues();
+
+        values.put("id",trip.getId());
+        values.put("destination",trip.getDestination());
+        values.put("country",trip.getCountry());
+        values.put("durationDays",trip.getDurationDays());
+        values.put("price",trip.getPrice());
+        values.put("rating",trip.getRating());
+        values.put("description",trip.getDescription());
+        values.put("image",trip.getImage());
+
+        long result =
+                db.insert(
+                        "Trips",
+                        null,
+                        values);
+
+        return result != -1;
+    }
+    public boolean deleteTrip(int tripId){
+
+        SQLiteDatabase db =
+                getWritableDatabase();
+
+        int result =
+                db.delete(
+                        "Trips",
+                        "id=?",
+                        new String[]{
+                                String.valueOf(tripId)
+                        });
+
+        return result > 0;
+    }
+    public boolean updateTrip(Trip trip){
+
+        SQLiteDatabase db =
+                getWritableDatabase();
+
+        ContentValues values =
+                new ContentValues();
+
+        values.put(
+                "destination",
+                trip.getDestination());
+
+        values.put(
+                "country",
+                trip.getCountry());
+
+        values.put(
+                "durationDays",
+                trip.getDurationDays());
+
+        values.put(
+                "price",
+                trip.getPrice());
+
+        values.put(
+                "rating",
+                trip.getRating());
+
+        values.put(
+                "description",
+                trip.getDescription());
+
+        int result =
+                db.update(
+                        "Trips",
+                        values,
+                        "id=?",
+                        new String[]{
+                                String.valueOf(
+                                        trip.getId())
+                        });
+
+        return result > 0;
+    }
 
     public boolean isFavorite(String userEmail, int tripId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -254,6 +338,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+
     // ========== RESERVATION METHODS ==========
 
     public boolean addReservation(String userEmail, int tripId, String date,
@@ -269,7 +354,99 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert("Reservations", null, values);
         return result != -1;
     }
+    public int getUsersCount() {
 
+        SQLiteDatabase db =
+                getReadableDatabase();
+
+        Cursor cursor =
+                db.rawQuery(
+                        "SELECT COUNT(*) FROM Users WHERE isAdmin=0",
+                        null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+
+        return count;
+    }
+    public int getReservationsCount() {
+
+        SQLiteDatabase db =
+                getReadableDatabase();
+
+        Cursor cursor =
+                db.rawQuery(
+                        "SELECT COUNT(*) FROM Reservations",
+                        null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+
+        return count;
+    }
+    public int getTripsCount() {
+
+        SQLiteDatabase db =
+                getReadableDatabase();
+
+        Cursor cursor =
+                db.rawQuery(
+                        "SELECT COUNT(*) FROM Trips",
+                        null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+
+        return count;
+    }
+    public List<User> getUsersList() {
+
+        List<User> users = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM Users WHERE isAdmin=0",
+                null);
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                User user = new User(
+                        cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("firstName")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("lastName")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("password")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("phone")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("gender")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("category"))
+                );
+
+                users.add(user);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return users;
+    }
     public Cursor getUserReservations(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT r.*, t.destination FROM Reservations r " +

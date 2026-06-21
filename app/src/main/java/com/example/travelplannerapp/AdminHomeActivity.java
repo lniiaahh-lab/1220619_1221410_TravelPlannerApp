@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -32,6 +33,16 @@ public class AdminHomeActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
+        TextView tvName =
+                navigationView.getHeaderView(0)
+                        .findViewById(R.id.tvNavUserName);
+
+        TextView tvEmail =
+                navigationView.getHeaderView(0)
+                        .findViewById(R.id.tvNavUserEmail);
+
+        tvName.setText("Administrator");
+        tvEmail.setText("admin@admin.com");
 
         navigationView.setNavigationItemSelectedListener(this);
 
