@@ -51,4 +51,35 @@ public class Trip {
     public double getRating() { return rating; }
     public String getDescription() { return description; }
     public String getImage() { return image; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setDurationDays(int durationDays) {
+        this.durationDays = durationDays;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

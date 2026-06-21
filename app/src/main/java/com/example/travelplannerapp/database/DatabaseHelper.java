@@ -187,7 +187,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert("Favorites", null, values);
         return result != -1;
     }
+    public Trip getTripById(int id) {
 
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM Trips WHERE id=?",
+                new String[]{String.valueOf(id)});
+
+        Trip trip = null;
+
+        if (cursor.moveToFirst()) {
+
+            trip = new Trip(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("destination")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("country")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("durationDays")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("price")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("rating")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("image"))
+            );
+        }
+
+        cursor.close();
+
+        return trip;
+    }
     public boolean removeFavorite(String userEmail, int tripId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete("Favorites",
@@ -220,18 +247,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result != -1;
     }
-    public boolean deleteTrip(int tripId){
+    public boolean deleteTrip(int tripId) {
 
-        SQLiteDatabase db =
-                getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(
+                "Favorites",
+                "tripId=?",
+                new String[]{String.valueOf(tripId)});
+
+        db.delete(
+                "Reservations",
+                "tripId=?",
+                new String[]{String.valueOf(tripId)});
 
         int result =
                 db.delete(
                         "Trips",
                         "id=?",
-                        new String[]{
-                                String.valueOf(tripId)
-                        });
+                        new String[]{String.valueOf(tripId)});
 
         return result > 0;
     }
