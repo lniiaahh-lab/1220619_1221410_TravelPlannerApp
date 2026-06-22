@@ -11,12 +11,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <EditText
-            android:id="@+id/etId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Trip ID"
-            android:inputType="number"/>
+
 
         <EditText
             android:id="@+id/etDestination"

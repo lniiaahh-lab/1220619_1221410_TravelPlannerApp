@@ -24,8 +24,6 @@ public class EditTripDialog {
                                 R.layout.dialog_add_trip,
                                 null);
 
-        EditText etId =
-                view.findViewById(R.id.etId);
 
         EditText etDestination =
                 view.findViewById(R.id.etDestination);
@@ -48,8 +46,7 @@ public class EditTripDialog {
         EditText etImage =
                 view.findViewById(R.id.etImage);
 
-        etId.setText(String.valueOf(trip.getId()));
-        etId.setEnabled(false);
+
 
         etDestination.setText(trip.getDestination());
         etCountry.setText(trip.getCountry());

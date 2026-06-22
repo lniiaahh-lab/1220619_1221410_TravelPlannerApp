@@ -1,6 +1,5 @@
 package com.example.travelplannerapp;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +18,14 @@ import java.util.List;
 
 public class ManageTripsFragment extends Fragment {
 
-    RecyclerView recyclerTrips;
-    Button btnAddTrip;
+    private RecyclerView recyclerTrips;
+    private Button btnAddTrip;
 
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
-    List<Trip> tripList;
+    private List<Trip> tripList;
 
-    TripAdapter adapter;
+    private TripAdapter adapter;
 
     @Override
     public View onCreateView(
@@ -73,55 +72,35 @@ public class ManageTripsFragment extends Fragment {
                             @Override
                             public void onFavoriteClick(Trip trip) {
 
-                                showEditDeleteDialog(trip);
+                                // Edit Trip
+                                EditTripDialog.show(
+                                        getContext(),
+                                        databaseHelper,
+                                        trip,
+                                        ManageTripsFragment.this::loadTrips);
                             }
 
                             @Override
                             public void onReserveClick(Trip trip) {
 
-                                showEditDeleteDialog(trip);
+                                // Delete Trip
+                                databaseHelper.deleteTrip(
+                                        trip.getId());
+
+                                loadTrips();
                             }
 
                             @Override
                             public void onTripClick(Trip trip) {
 
-                                showEditDeleteDialog(trip);
+                                // Optional:
+                                // Show details dialog later if you want
                             }
-                        });
+                        },
+                        true // Admin Mode
+                );
 
         recyclerTrips.setAdapter(adapter);
-    }
-
-    private void showEditDeleteDialog(Trip trip) {
-
-        String[] options = {
-                "Edit Trip",
-                "Delete Trip"
-        };
-
-        new AlertDialog.Builder(getContext())
-                .setTitle(trip.getDestination())
-                .setItems(options,
-                        (dialog, which) -> {
-
-                            if (which == 0) {
-
-                                EditTripDialog.show(
-                                        getContext(),
-                                        databaseHelper,
-                                        trip,
-                                        this::loadTrips);
-
-                            } else {
-
-                                databaseHelper
-                                        .deleteTrip(
-                                                trip.getId());
-
-                                loadTrips();
-                            }
-                        })
-                .show();
     }
 
     private void showAddTripDialog() {

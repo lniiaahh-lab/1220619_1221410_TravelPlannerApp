@@ -1,5 +1,5 @@
 package com.example.travelplannerapp.database;
-
+import com.example.travelplannerapp.models.ReservationAdmin;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,7 +17,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "TravelPlanner.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Trips Table
         db.execSQL("CREATE TABLE Trips (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "destination TEXT, " +
                 "country TEXT, " +
                 "durationDays INTEGER, " +
@@ -93,7 +93,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert("Users", null, values);
         return result != -1;
     }
+    public List<ReservationAdmin> getAllReservationsList() {
 
+        List<ReservationAdmin> list = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT r.*, t.destination FROM Reservations r " +
+                        "INNER JOIN Trips t ON r.tripId = t.id",
+                null);
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                ReservationAdmin reservation =
+                        new ReservationAdmin(
+
+                                cursor.getString(
+                                        cursor.getColumnIndexOrThrow(
+                                                "userEmail")),
+
+                                cursor.getString(
+                                        cursor.getColumnIndexOrThrow(
+                                                "destination")),
+
+                                cursor.getString(
+                                        cursor.getColumnIndexOrThrow(
+                                                "reservationDate")),
+
+                                cursor.getString(
+                                        cursor.getColumnIndexOrThrow(
+                                                "status")),
+
+                                cursor.getInt(
+                                        cursor.getColumnIndexOrThrow(
+                                                "quantity")),
+
+                                cursor.getString(
+                                        cursor.getColumnIndexOrThrow(
+                                                "type"))
+                        );
+
+                list.add(reservation);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return list;
+    }
     public boolean checkUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Users WHERE email=? AND password=?",
@@ -230,7 +281,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values =
                 new ContentValues();
 
-        values.put("id",trip.getId());
         values.put("destination",trip.getDestination());
         values.put("country",trip.getCountry());
         values.put("durationDays",trip.getDurationDays());

@@ -19,100 +19,209 @@ import com.example.travelplannerapp.adapters.TripAdapter;
 import com.example.travelplannerapp.database.DatabaseHelper;
 import com.example.travelplannerapp.models.Trip;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class TripsFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    TripAdapter adapter;
-    List<Trip> allTrips, filteredTrips;
-    DatabaseHelper databaseHelper;
-    EditText etSearch;
-    String currentUserEmail;
+    private RecyclerView recyclerView;
+    private TripAdapter adapter;
+
+    private List<Trip> allTrips;
+    private List<Trip> filteredTrips;
+
+    private DatabaseHelper databaseHelper;
+
+    private EditText etSearch;
+
+    private String currentUserEmail;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trips, container, false);
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
 
-        databaseHelper = new DatabaseHelper(getContext());
+        View view = inflater.inflate(
+                R.layout.fragment_trips,
+                container,
+                false);
 
-        SharedPreferences prefs = requireActivity()
-                .getSharedPreferences("TravelPlannerPrefs", getContext().MODE_PRIVATE);
-        currentUserEmail = prefs.getString("currentUserEmail", "");
+        databaseHelper =
+                new DatabaseHelper(getContext());
 
-        etSearch = view.findViewById(R.id.etSearch);
-        recyclerView = view.findViewById(R.id.recyclerViewTrips);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        SharedPreferences prefs =
+                requireActivity().getSharedPreferences(
+                        "TravelPlannerPrefs",
+                        getContext().MODE_PRIVATE);
 
-        allTrips = databaseHelper.getAllTrips();
-        filteredTrips = new ArrayList<>(allTrips);
+        currentUserEmail =
+                prefs.getString(
+                        "currentUserEmail",
+                        "");
 
-        adapter = new TripAdapter(getContext(), filteredTrips, new TripAdapter.OnTripClickListener() {
-            @Override
-            public void onFavoriteClick(Trip trip) {
-                if (databaseHelper.isFavorite(currentUserEmail, trip.getId())) {
-                    databaseHelper.removeFavorite(currentUserEmail, trip.getId());
-                    Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
-                } else {
-                    databaseHelper.addFavorite(currentUserEmail, trip.getId());
-                    Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
-                }
-            }
+        etSearch =
+                view.findViewById(R.id.etSearch);
 
-            @Override
-            public void onReserveClick(Trip trip) {
-                showReservationDialog(trip);
-            }
+        recyclerView =
+                view.findViewById(R.id.recyclerViewTrips);
 
-            @Override
-            public void onTripClick(Trip trip) {
-                Toast.makeText(getContext(), trip.getDestination(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext()));
+
+        allTrips =
+                databaseHelper.getAllTrips();
+
+        filteredTrips =
+                new ArrayList<>(allTrips);
+
+        adapter =
+                new TripAdapter(
+                        getContext(),
+                        filteredTrips,
+                        new TripAdapter.OnTripClickListener() {
+
+                            @Override
+                            public void onFavoriteClick(
+                                    Trip trip) {
+
+                                if (databaseHelper.isFavorite(
+                                        currentUserEmail,
+                                        trip.getId())) {
+
+                                    databaseHelper.removeFavorite(
+                                            currentUserEmail,
+                                            trip.getId());
+
+                                    Toast.makeText(
+                                                    getContext(),
+                                                    "Removed from favorites",
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+
+                                } else {
+
+                                    databaseHelper.addFavorite(
+                                            currentUserEmail,
+                                            trip.getId());
+
+                                    Toast.makeText(
+                                                    getContext(),
+                                                    "Added to favorites!",
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }
+
+                            @Override
+                            public void onReserveClick(
+                                    Trip trip) {
+
+                                showReservationDialog(trip);
+                            }
+
+                            @Override
+                            public void onTripClick(
+                                    Trip trip) {
+
+                                Toast.makeText(
+                                                getContext(),
+                                                trip.getDestination(),
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        },
+                        false // User Mode
+                );
 
         recyclerView.setAdapter(adapter);
 
-        // Search
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        etSearch.addTextChangedListener(
+                new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterTrips(s.toString());
-            }
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s,
+                            int start,
+                            int count,
+                            int after) {
+                    }
 
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+                    @Override
+                    public void onTextChanged(
+                            CharSequence s,
+                            int start,
+                            int before,
+                            int count) {
 
-        // Filter buttons
-        Button btnAll = view.findViewById(R.id.btnFilterAll);
-        Button btnPrice = view.findViewById(R.id.btnFilterPrice);
-        Button btnRating = view.findViewById(R.id.btnFilterRating);
-        Button btnDuration = view.findViewById(R.id.btnFilterDuration);
+                        filterTrips(
+                                s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(
+                            Editable s) {
+                    }
+                });
+
+        Button btnAll =
+                view.findViewById(
+                        R.id.btnFilterAll);
+
+        Button btnPrice =
+                view.findViewById(
+                        R.id.btnFilterPrice);
+
+        Button btnRating =
+                view.findViewById(
+                        R.id.btnFilterRating);
+
+        Button btnDuration =
+                view.findViewById(
+                        R.id.btnFilterDuration);
 
         btnAll.setOnClickListener(v -> {
+
             filteredTrips.clear();
+
             filteredTrips.addAll(allTrips);
+
             adapter.notifyDataSetChanged();
         });
 
         btnPrice.setOnClickListener(v -> {
-            Collections.sort(filteredTrips, (a, b) -> Double.compare(a.getPrice(), b.getPrice()));
+
+            Collections.sort(
+                    filteredTrips,
+                    (a, b) -> Double.compare(
+                            a.getPrice(),
+                            b.getPrice()));
+
             adapter.notifyDataSetChanged();
         });
 
         btnRating.setOnClickListener(v -> {
-            Collections.sort(filteredTrips, (a, b) -> Double.compare(b.getRating(), a.getRating()));
+
+            Collections.sort(
+                    filteredTrips,
+                    (a, b) -> Double.compare(
+                            b.getRating(),
+                            a.getRating()));
+
             adapter.notifyDataSetChanged();
         });
 
         btnDuration.setOnClickListener(v -> {
-            Collections.sort(filteredTrips, (a, b) -> Integer.compare(a.getDurationDays(), b.getDurationDays()));
+
+            Collections.sort(
+                    filteredTrips,
+                    (a, b) -> Integer.compare(
+                            a.getDurationDays(),
+                            b.getDurationDays()));
+
             adapter.notifyDataSetChanged();
         });
 
@@ -120,57 +229,141 @@ public class TripsFragment extends Fragment {
     }
 
     private void filterTrips(String query) {
+
         filteredTrips.clear();
+
         if (query.isEmpty()) {
+
             filteredTrips.addAll(allTrips);
+
         } else {
+
             for (Trip trip : allTrips) {
-                if (trip.getDestination().toLowerCase().contains(query.toLowerCase()) ||
-                        trip.getCountry().toLowerCase().contains(query.toLowerCase())) {
+
+                if (trip.getDestination()
+                        .toLowerCase()
+                        .contains(query.toLowerCase())
+
+                        ||
+
+                        trip.getCountry()
+                                .toLowerCase()
+                                .contains(query.toLowerCase())) {
+
                     filteredTrips.add(trip);
                 }
             }
         }
+
         adapter.notifyDataSetChanged();
     }
 
-    private void showReservationDialog(Trip trip) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-        builder.setTitle("Reserve: " + trip.getDestination());
+    private void showReservationDialog(
+            Trip trip) {
 
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_reservation, null);
+        android.app.AlertDialog.Builder builder =
+                new android.app.AlertDialog.Builder(
+                        getContext());
+
+        builder.setTitle(
+                "Reserve: "
+                        + trip.getDestination());
+
+        View dialogView =
+                LayoutInflater.from(getContext())
+                        .inflate(
+                                R.layout.dialog_reservation,
+                                null);
+
         builder.setView(dialogView);
 
-        android.widget.EditText etQuantity = dialogView.findViewById(R.id.etQuantity);
-        android.widget.Spinner spinnerType = dialogView.findViewById(R.id.spinnerType);
+        android.widget.EditText etQuantity =
+                dialogView.findViewById(
+                        R.id.etQuantity);
 
-        android.widget.ArrayAdapter<String> typeAdapter = new android.widget.ArrayAdapter<>(
-                getContext(), android.R.layout.simple_spinner_item,
-                new String[]{"Standard", "Premium", "VIP"});
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        android.widget.Spinner spinnerType =
+                dialogView.findViewById(
+                        R.id.spinnerType);
+
+        android.widget.ArrayAdapter<String>
+                typeAdapter =
+                new android.widget.ArrayAdapter<>(
+                        getContext(),
+                        android.R.layout.simple_spinner_item,
+                        new String[]{
+                                "Standard",
+                                "Premium",
+                                "VIP"
+                        });
+
+        typeAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
         spinnerType.setAdapter(typeAdapter);
 
-        builder.setPositiveButton("Confirm", (dialog, which) -> {
-            String quantityStr = etQuantity.getText().toString().trim();
-            if (quantityStr.isEmpty()) {
-                Toast.makeText(getContext(), "Enter quantity", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            int quantity = Integer.parseInt(quantityStr);
-            String type = spinnerType.getSelectedItem().toString();
-            String date = java.text.DateFormat.getDateInstance().format(new java.util.Date());
+        builder.setPositiveButton(
+                "Confirm",
+                (dialog, which) -> {
 
-            boolean success = databaseHelper.addReservation(
-                    currentUserEmail, trip.getId(), date, quantity, type);
+                    String quantityStr =
+                            etQuantity.getText()
+                                    .toString()
+                                    .trim();
 
-            if (success) {
-                Toast.makeText(getContext(), "Reservation confirmed!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Reservation failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    if (quantityStr.isEmpty()) {
 
-        builder.setNegativeButton("Cancel", null);
+                        Toast.makeText(
+                                        getContext(),
+                                        "Enter quantity",
+                                        Toast.LENGTH_SHORT)
+                                .show();
+
+                        return;
+                    }
+
+                    int quantity =
+                            Integer.parseInt(
+                                    quantityStr);
+
+                    String type =
+                            spinnerType
+                                    .getSelectedItem()
+                                    .toString();
+
+                    String date =
+                            DateFormat.getDateInstance()
+                                    .format(new Date());
+
+                    boolean success =
+                            databaseHelper.addReservation(
+                                    currentUserEmail,
+                                    trip.getId(),
+                                    date,
+                                    quantity,
+                                    type);
+
+                    if (success) {
+
+                        Toast.makeText(
+                                        getContext(),
+                                        "Reservation confirmed!",
+                                        Toast.LENGTH_SHORT)
+                                .show();
+
+                    } else {
+
+                        Toast.makeText(
+                                        getContext(),
+                                        "Reservation failed",
+                                        Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });
+
+        builder.setNegativeButton(
+                "Cancel",
+                null);
+
         builder.show();
     }
 }

@@ -23,8 +23,7 @@ public class AddTripDialog {
                                 R.layout.dialog_add_trip,
                                 null);
 
-        EditText etId =
-                view.findViewById(R.id.etId);
+
 
         EditText etDestination =
                 view.findViewById(R.id.etDestination);
@@ -57,7 +56,7 @@ public class AddTripDialog {
 
                             Trip trip =
                                     new Trip(
-                                            Integer.parseInt(etId.getText().toString()),
+                                            0,
                                             etDestination.getText().toString(),
                                             etCountry.getText().toString(),
                                             Integer.parseInt(etDuration.getText().toString()),
