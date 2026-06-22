@@ -23,8 +23,6 @@ public class AddTripDialog {
                                 R.layout.dialog_add_trip,
                                 null);
 
-
-
         EditText etDestination =
                 view.findViewById(R.id.etDestination);
 
@@ -46,42 +44,139 @@ public class AddTripDialog {
         EditText etImage =
                 view.findViewById(R.id.etImage);
 
-        new AlertDialog.Builder(context)
-                .setTitle("Add Trip")
-                .setView(view)
+        AlertDialog dialog =
+                new AlertDialog.Builder(context)
+                        .setTitle("Add Trip")
+                        .setView(view)
+                        .setPositiveButton(
+                                "Save",
+                                null)
+                        .setNegativeButton(
+                                "Cancel",
+                                null)
+                        .create();
 
-                .setPositiveButton(
-                        "Save",
-                        (dialog, which) -> {
+        dialog.show();
 
-                            Trip trip =
-                                    new Trip(
-                                            0,
-                                            etDestination.getText().toString(),
-                                            etCountry.getText().toString(),
-                                            Integer.parseInt(etDuration.getText().toString()),
-                                            Double.parseDouble(etPrice.getText().toString()),
-                                            Double.parseDouble(etRating.getText().toString()),
-                                            etDescription.getText().toString(),
-                                            etImage.getText().toString()
-                                    );
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
 
-                            if (db.addTrip(trip)) {
+                    String destination =
+                            etDestination.getText()
+                                    .toString()
+                                    .trim();
 
-                                Toast.makeText(
-                                                context,
-                                                "Trip Added",
-                                                Toast.LENGTH_SHORT)
-                                        .show();
+                    String country =
+                            etCountry.getText()
+                                    .toString()
+                                    .trim();
 
-                                refreshCallback.run();
-                            }
-                        })
+                    String durationStr =
+                            etDuration.getText()
+                                    .toString()
+                                    .trim();
 
-                .setNegativeButton(
-                        "Cancel",
-                        null)
+                    String priceStr =
+                            etPrice.getText()
+                                    .toString()
+                                    .trim();
 
-                .show();
+                    String ratingStr =
+                            etRating.getText()
+                                    .toString()
+                                    .trim();
+
+                    String description =
+                            etDescription.getText()
+                                    .toString()
+                                    .trim();
+
+                    String image =
+                            etImage.getText()
+                                    .toString()
+                                    .trim();
+
+                    // Check empty fields
+                    if (destination.isEmpty()
+                            || country.isEmpty()
+                            || durationStr.isEmpty()
+                            || priceStr.isEmpty()
+                            || ratingStr.isEmpty()
+                            || description.isEmpty()
+                            || image.isEmpty()) {
+
+                        Toast.makeText(
+                                        context,
+                                        "Please fill all fields",
+                                        Toast.LENGTH_SHORT)
+                                .show();
+
+                        return;
+                    }
+
+                    try {
+
+                        int duration =
+                                Integer.parseInt(durationStr);
+
+                        double price =
+                                Double.parseDouble(priceStr);
+
+                        double rating =
+                                Double.parseDouble(ratingStr);
+
+                        if (rating < 0 || rating > 5) {
+
+                            Toast.makeText(
+                                            context,
+                                            "Rating must be between 0 and 5",
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+
+                            return;
+                        }
+
+                        Trip trip =
+                                new Trip(
+                                        0, // Auto Increment ID
+                                        destination,
+                                        country,
+                                        duration,
+                                        price,
+                                        rating,
+                                        description,
+                                        image
+                                );
+
+                        if (db.addTrip(trip)) {
+
+                            Toast.makeText(
+                                            context,
+                                            "Trip Added Successfully",
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+
+                            refreshCallback.run();
+
+                            dialog.dismiss();
+
+                        } else {
+
+                            Toast.makeText(
+                                            context,
+                                            "Failed to add trip",
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+
+                    } catch (NumberFormatException e) {
+
+                        Toast.makeText(
+                                        context,
+                                        "Duration, Price and Rating must be valid numbers",
+                                        Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
     }
 }

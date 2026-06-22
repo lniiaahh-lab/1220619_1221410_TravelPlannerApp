@@ -73,23 +73,118 @@ public class AddAdminFragment extends Fragment {
         String password =
                 etPassword.getText().toString().trim();
 
+        // Empty fields validation
+        if (TextUtils.isEmpty(email)
+                || TextUtils.isEmpty(firstName)
+                || TextUtils.isEmpty(lastName)
+                || TextUtils.isEmpty(phone)
+                || TextUtils.isEmpty(password)) {
+
+            Toast.makeText(
+                            getContext(),
+                            "Please fill all fields",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
+            return;
+        }
+
+        // Email validation
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Invalid Email");
+
+            etEmail.setError("Enter valid email");
+
+            Toast.makeText(
+                            getContext(),
+                            "Enter valid email",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
+            return;
+        }
+
+        // Check if email already exists
+        if (databaseHelper.emailExists(email)) {
+
+            etEmail.setError("Email already exists");
+
+            Toast.makeText(
+                            getContext(),
+                            "Email already exists",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
+            return;
+        }
+
+        // First name validation
+        if (!firstName.matches("[a-zA-Z ]+")) {
+
+            etFirstName.setError("Enter valid first name");
+
+            Toast.makeText(
+                            getContext(),
+                            "Enter valid first name",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
             return;
         }
 
         if (firstName.length() < 3) {
-            etFirstName.setError("Minimum 3 chars");
+
+            etFirstName.setError("Minimum 3 characters");
+
+            return;
+        }
+
+        // Last name validation
+        if (!lastName.matches("[a-zA-Z ]+")) {
+
+            etLastName.setError("Enter valid last name");
+
+            Toast.makeText(
+                            getContext(),
+                            "Enter valid last name",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
             return;
         }
 
         if (lastName.length() < 3) {
-            etLastName.setError("Minimum 3 chars");
+
+            etLastName.setError("Minimum 3 characters");
+
             return;
         }
 
+        // Phone validation
+        if (!phone.matches("[0-9]{9,15}")) {
+
+            etPhone.setError("Enter valid phone number");
+
+            Toast.makeText(
+                            getContext(),
+                            "Enter valid phone number",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
+            return;
+        }
+
+        // Password validation
         if (!isValidPassword(password)) {
-            etPassword.setError("Password must contain letters and numbers");
+
+            etPassword.setError(
+                    "Password must contain letters and numbers");
+
+            Toast.makeText(
+                            getContext(),
+                            "Password must contain letters and numbers",
+                            Toast.LENGTH_SHORT)
+                    .show();
+
             return;
         }
 
@@ -114,11 +209,18 @@ public class AddAdminFragment extends Fragment {
                             Toast.LENGTH_SHORT)
                     .show();
 
+            // Clear fields
+            etEmail.setText("");
+            etFirstName.setText("");
+            etLastName.setText("");
+            etPhone.setText("");
+            etPassword.setText("");
+
         } else {
 
             Toast.makeText(
                             getContext(),
-                            "Admin Already Exists",
+                            "Failed To Add Admin",
                             Toast.LENGTH_SHORT)
                     .show();
         }

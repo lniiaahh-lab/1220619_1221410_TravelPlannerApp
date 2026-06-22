@@ -18,12 +18,8 @@ public class EditTripDialog {
             Trip trip,
             Runnable refreshCallback) {
 
-        View view =
-                LayoutInflater.from(context)
-                        .inflate(
-                                R.layout.dialog_add_trip,
-                                null);
-
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.dialog_add_trip, null);
 
         EditText etDestination =
                 view.findViewById(R.id.etDestination);
@@ -46,7 +42,7 @@ public class EditTripDialog {
         EditText etImage =
                 view.findViewById(R.id.etImage);
 
-
+        // Fill current trip data
 
         etDestination.setText(trip.getDestination());
         etCountry.setText(trip.getCountry());
@@ -56,53 +52,158 @@ public class EditTripDialog {
         etDescription.setText(trip.getDescription());
         etImage.setText(trip.getImage());
 
-        new AlertDialog.Builder(context)
-                .setTitle("Edit Trip")
-                .setView(view)
+        AlertDialog dialog =
+                new AlertDialog.Builder(context)
+                        .setTitle("Edit Trip")
+                        .setView(view)
+                        .setPositiveButton("Update", null)
+                        .setNegativeButton("Cancel", null)
+                        .create();
 
-                .setPositiveButton(
-                        "Update",
-                        (dialog, which) -> {
+        dialog.show();
 
-                            trip.setDestination(
-                                    etDestination.getText().toString());
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
 
-                            trip.setCountry(
-                                    etCountry.getText().toString());
+                    String destination =
+                            etDestination.getText().toString().trim();
 
-                            trip.setDurationDays(
-                                    Integer.parseInt(
-                                            etDuration.getText().toString()));
+                    String country =
+                            etCountry.getText().toString().trim();
 
-                            trip.setPrice(
-                                    Double.parseDouble(
-                                            etPrice.getText().toString()));
+                    String duration =
+                            etDuration.getText().toString().trim();
 
-                            trip.setRating(
-                                    Double.parseDouble(
-                                            etRating.getText().toString()));
+                    String price =
+                            etPrice.getText().toString().trim();
 
-                            trip.setDescription(
-                                    etDescription.getText().toString());
+                    String rating =
+                            etRating.getText().toString().trim();
 
-                            trip.setImage(
-                                    etImage.getText().toString());
+                    String description =
+                            etDescription.getText().toString().trim();
 
-                            db.updateTrip(trip);
+                    String image =
+                            etImage.getText().toString().trim();
+
+                    // Empty fields validation
+
+                    if (destination.isEmpty()
+                            || country.isEmpty()
+                            || duration.isEmpty()
+                            || price.isEmpty()
+                            || rating.isEmpty()
+                            || description.isEmpty()
+                            || image.isEmpty()) {
+
+                        Toast.makeText(
+                                context,
+                                "Please fill all fields",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        return;
+                    }
+
+                    // Destination & Country validation
+
+                    if (!destination.matches("[a-zA-Z ]+")
+                            || !country.matches("[a-zA-Z ]+")) {
+
+                        Toast.makeText(
+                                context,
+                                "Enter valid content",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        return;
+                    }
+
+                    try {
+
+                        int durationValue =
+                                Integer.parseInt(duration);
+
+                        double priceValue =
+                                Double.parseDouble(price);
+
+                        double ratingValue =
+                                Double.parseDouble(rating);
+
+                        if (durationValue <= 0) {
 
                             Toast.makeText(
-                                            context,
-                                            "Trip Updated",
-                                            Toast.LENGTH_SHORT)
-                                    .show();
+                                    context,
+                                    "Duration must be greater than 0",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            return;
+                        }
+
+                        if (priceValue <= 0) {
+
+                            Toast.makeText(
+                                    context,
+                                    "Price must be greater than 0",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            return;
+                        }
+
+                        if (ratingValue < 0
+                                || ratingValue > 5) {
+
+                            Toast.makeText(
+                                    context,
+                                    "Rating must be between 0 and 5",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            return;
+                        }
+
+                        trip.setDestination(destination);
+                        trip.setCountry(country);
+                        trip.setDurationDays(durationValue);
+                        trip.setPrice(priceValue);
+                        trip.setRating(ratingValue);
+                        trip.setDescription(description);
+                        trip.setImage(image);
+
+                        boolean updated =
+                                db.updateTrip(trip);
+
+                        if (updated) {
+
+                            Toast.makeText(
+                                    context,
+                                    "Trip Updated Successfully",
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
                             refreshCallback.run();
-                        })
 
-                .setNegativeButton(
-                        "Cancel",
-                        null)
+                            dialog.dismiss();
 
-                .show();
+                        } else {
+
+                            Toast.makeText(
+                                    context,
+                                    "Failed To Update Trip",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+
+                    } catch (NumberFormatException e) {
+
+                        Toast.makeText(
+                                context,
+                                "Duration, Price and Rating must be valid numbers",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
     }
 }

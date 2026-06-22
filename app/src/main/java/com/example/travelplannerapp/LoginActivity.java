@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -44,6 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         btnLogin.setOnClickListener(v -> {
+            Animation scaleAnimation =
+                    AnimationUtils.loadAnimation(
+                            LoginActivity.this,
+                            R.anim.button_scale);
+
+            v.startAnimation(scaleAnimation);
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
