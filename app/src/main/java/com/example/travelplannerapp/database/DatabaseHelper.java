@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // ========== SECURITY METHODS ==========
+
 
     private String hashPassword(String password) {
         try {
@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // ========== USER METHODS ==========
+
 
     public boolean insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -214,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return users;
     }
 
-    // ========== TRIP METHODS ==========
+
 
     public void insertTrips(List<Trip> trips) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -317,7 +317,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result > 0;
     }
 
-    // ========== FAVORITES METHODS ==========
+
 
     public boolean addFavorite(String userEmail, int tripId) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -365,7 +365,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return trips;
     }
 
-    // ========== RESERVATION METHODS ==========
+
 
     public boolean addReservation(String userEmail, int tripId, String date, int quantity, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -421,7 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    // ========== DASHBOARD METHODS ==========
+
 
     public int getUsersCount() {
         SQLiteDatabase db = getReadableDatabase();
